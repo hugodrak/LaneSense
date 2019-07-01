@@ -13,7 +13,7 @@ def region_of_interest(img, vertices):
     masked_image = cv2.bitwise_and(img, mask)
     return masked_image
 
-def draw_lines(img, lines, thickness=3):
+def draw_lines(img, lines, thickness, mode):
     line_img = np.zeros(
         (
             img.shape[0],
@@ -22,7 +22,10 @@ def draw_lines(img, lines, thickness=3):
         ),
         dtype=np.uint8
     )
-    img = np.copy(img)
+    if mode == 1:
+        img = np.copy(img)
+    elif mode == 2:
+        img = line_img
 
     if lines is None:
         return
@@ -32,7 +35,6 @@ def draw_lines(img, lines, thickness=3):
         for x1, y1, x2, y2, letter, color, ang in line:
             cv2.line(line_img, (x1, y1), (x2, y2), color, thickness)
             printout.extend([letter, str(round(ang, 1))])
-
         cv2.putText(line_img, (str(printout)),(0,50), font, 1.4,(150,100,150),2,cv2.LINE_AA)
 
     img = cv2.addWeighted(img, 0.8, line_img, 1.0, 0.0)
@@ -58,17 +60,16 @@ def pipeline(image):
     An image processing pipeline which will output
     an image with the lane lines annotated.
     """
-
     height = image.shape[0]
     width = image.shape[1]
     region_of_interest_vertices = [
-        (0, height),
-        (width / 2, height / 2),
-        (width, height),
+        (width*0.07, height),
+        (width*0.5, height*0.35),
+        (width*0.85, height),
     ]
 
     gray_image = cv2.cvtColor(image, cv2.COLOR_RGB2GRAY)
-
+    np.zeros((height,width,3), np.uint8)
     cannyed_image = cv2.Canny(gray_image, 100, 200)
 
     cropped_image = region_of_interest(
@@ -78,6 +79,26 @@ def pipeline(image):
             np.int32
         ),
     )
+    mask_image = region_of_interest(
+        image,
+        np.array(
+            [region_of_interest_vertices],
+            np.int32
+        ),
+    )
+    # gray_image = cv2.cvtColor(image, cv2.COLOR_RGB2GRAY)
+    # cropped_image = region_of_interest(
+    #     gray_image,
+    #     np.array(
+    #         [region_of_interest_vertices],
+    #         np.int32
+    #     ),
+    # )
+    # # np.zeros((height,width,3), np.uint8)
+    # cannyed_image = cv2.Canny(cropped_image, 100, 200)
+    #
+    # cropped_image = cannyed_image
+
 
     lines = cv2.HoughLinesP(
         cropped_image,
@@ -136,10 +157,9 @@ def pipeline(image):
         if not steer == None:
             lines_processed.append(steer)
 
+        line_image = draw_lines(image, [lines_processed], 12, 1,)
 
-        line_image = draw_lines(image, [lines_processed], thickness=12,)
-
-        return line_image
+        return line_image, cropped_image, mask_image
     else:
         return image
     # elif mode == 2:
