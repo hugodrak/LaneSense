@@ -1,4 +1,4 @@
-from pipeline import pipeline
+from tsr import tsr
 import cv2, sys
 import matplotlib.pyplot as plt
 
