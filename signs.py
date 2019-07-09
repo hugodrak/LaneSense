@@ -19,7 +19,7 @@ def get_signs(image):
 
     # detect circles in the image
     circles = cv2.HoughCircles(gray, cv2.HOUGH_GRADIENT, 1.5, 200, maxRadius=50)
-    print(circles)
+    # print(circles)
     # ensure at least some circles were found
     if circles is not None:
         # convert the (x, y) coordinates and radius of the circles to integers
@@ -34,7 +34,7 @@ def get_signs(image):
         # cv2.rectangle(output, (x - 5, y - 5), (x + 5, y + 5), (0, 128, 255), -1)
         # show the output image
         # print("HELLO DIS IS SPEED LIMIT: {}".format(to_text(output).rstrip(")")))
-        print(to_text(detected_sign))
+        # print(to_text(detected_sign))
         # np.resize(image, (350, 200))
 
     return output
