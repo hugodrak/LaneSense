@@ -7,7 +7,6 @@ from moviepy.editor import VideoFileClip
 import cv2, sys, os
 import matplotlib.pyplot as plt
 import numpy as np
-import time
 
 in_file = sys.argv[1]
 source = VideoFileClip(in_file, fps_source="fps")
@@ -44,7 +43,20 @@ def toggle_images(event):
     frame = source.get_frame(time)
     line_image, cropped_image, mask_image = pipeline()
 
-while show:
-    if cv2.waitKey(33) == ord('a'):
-        print "pressed a"
-    time.sleep(1)
+
+    # img1.set_data(line_image)
+    # img2.set_data(mask_image)
+    # img3.set_data(cropped_image)
+    # plt.draw()
+    #-------------------------------
+
+plt.connect('key_press_event', toggle_images)
+
+img1 = ax1.imshow(line_image)
+img2 = ax2.imshow(mask_image)
+img3 = ax3.imshow(cropped_image)
+
+mng = plt.get_current_fig_manager()
+mng.full_screen_toggle()
+
+plt.show()

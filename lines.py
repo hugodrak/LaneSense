@@ -55,7 +55,7 @@ def steer_line(lines):
         return line
 
 
-def pipeline(image):
+def get_lines(image):
     """
     An image processing pipeline which will output
     an image with the lane lines annotated.
@@ -159,7 +159,7 @@ def pipeline(image):
 
         line_image = draw_lines(image, [lines_processed], 12, 1,)
 
-        return line_image, cropped_image, mask_image
+        return line_image#, cropped_image, mask_image
     else:
         return image
     # elif mode == 2:
