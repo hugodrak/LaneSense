@@ -37,7 +37,7 @@ def ratio_a(box):
     return float(box[1]-box[0])/float(box[3]-box[2])
 
 def get_plates(image):
-    image = cv2.imread(sys.argv[1])
+    # image = cv2.imread(sys.argv[1])
 
     resized = imutils.resize(image, width=300)
     ratio = image.shape[0] / float(resized.shape[0])
@@ -73,7 +73,7 @@ def get_plates(image):
                     cropped = crop_contour(image, to_box(approx, 0.1))
                     # thresh_crop = process_img(cropped, 110)
                     # cv2.imshow("cropped", cropped)
-                    print(to_text(cropped))
+                    # print(to_text(cropped))
 
     cv2.drawContours(output, plates, -1, (0, 255, 0), 2)
 
