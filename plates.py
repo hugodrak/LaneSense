@@ -5,6 +5,14 @@ from text_detect import to_text
 
 ##     plate_ratio = 4.73
 
+
+def region_of_interest(img, vertices):
+    mask = np.zeros_like(img)
+    match_mask_color = (255, 255, 255)
+    cv2.fillPoly(mask, vertices, match_mask_color)
+    masked_image = cv2.bitwise_and(img, mask)
+    return masked_image
+
 def process_img(img, limit):
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
     # blurred = cv2.GaussianBlur(gray, (5, 5), 0)
@@ -39,11 +47,34 @@ def ratio_a(box):
 def get_plates(image):
     # image = cv2.imread(sys.argv[1])
 
-    resized = imutils.resize(image, width=300)
-    ratio = image.shape[0] / float(resized.shape[0])
+    # masked_image = imutils.resize(image, width=300)
+
+
+    height = image.shape[0]
+    width = image.shape[1]
+
+    region_of_interest_vertices = [
+            (width*0.0, height),
+            (width*0.0, height*0.65),
+            (width*0.32, height*0.45),
+            (width*0.5, height*0.45),
+            (width*0.8, height*0.9),
+            (width*0.8 , height),
+    ]
+
+    masked_image = region_of_interest(
+        image,
+        np.array(
+            [region_of_interest_vertices],
+            np.int32
+        ),
+    )
+
+
+    ratio = image.shape[0] / float(masked_image.shape[0])
     # and threshold it
-    # convert the resized image to grayscale, blur it slightly,
-    thresh = process_img(resized, 70)
+    # convert the masked_image image to grayscale, blur it slightly,
+    thresh = process_img(masked_image, 70)
 
     # find contours in the thresholded image and initialize the
     # shape detectorcnts[3],
@@ -78,5 +109,4 @@ def get_plates(image):
     cv2.drawContours(output, plates, -1, (0, 255, 0), 2)
 
     return output
-    # cv2.imshow("Image", output)
-    # cv2.waitKey(0)
+    

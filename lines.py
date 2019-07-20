@@ -8,7 +8,7 @@ font = cv2.FONT_HERSHEY_SIMPLEX
 
 def region_of_interest(img, vertices):
     mask = np.zeros_like(img)
-    match_mask_color = 255
+    match_mask_color = (255, 255, 255)
     cv2.fillPoly(mask, vertices, match_mask_color)
     masked_image = cv2.bitwise_and(img, mask)
     return masked_image
