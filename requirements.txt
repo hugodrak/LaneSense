@@ -3,3 +3,4 @@ opencv-python==4.1.0.25
 matplotlib==2.2.4
 moviepy==1.0.0
 pytesseract
+imutils
