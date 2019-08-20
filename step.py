@@ -9,9 +9,9 @@ from signs import get_signs
 
 parser = argparse.ArgumentParser(description='Detect objects around the road.')
 parser.add_argument('-f', '--file', help='The videofile to step through')
-parser.add_argument('-r', '--rate', help='rate rate through file', type=int)
-parser.add_argument('-s', '--start', help='where in the video sequence to start', type=int)
-parser.add_argument('-v', '--views', help='which views to show')
+parser.add_argument('-r', '--rate', help='rate rate through file ex. 200ms', type=int)
+parser.add_argument('-s', '--start', help='where in the video sequence to start ex 2s', type=int)
+parser.add_argument('-v', '--views', help='which views to show ex. 1,2,3')
 
 
 args = parser.parse_args()
@@ -94,9 +94,9 @@ duration = source.duration
 print("Duration: " + str(duration))
 time_frame = float(args.rate)/1000
 # time_frame = float(float(int(args.rate)/1000)
-print(time_frame)
+# print(time_frame)
 
-time_clip = int(args.start)
+time_clip = float(args.start)
 show = True
 
 def toggle_images(key):
@@ -110,7 +110,8 @@ def toggle_images(key):
     if (time_clip >= (duration-time_frame)):
         time_clip = 0
         print("Reached end of file!")
-
+    if key == 116:
+        print(time_clip)
     if key == 113:
         show = False
         return

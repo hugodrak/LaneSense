@@ -99,14 +99,18 @@ def get_plates(image):
             approx = cv2.approxPolyDP(c,epsilon,True)
 
             if len(approx) == 4:
-                if ratio_a(to_box(approx, 0)) > 4:
+                box = to_box(approx, 0)
+                widht = box[1]-box[0]
+
+                #if the ratio of the detected box is grater than 4 between widht and height and if the widht exceeds 30 pixels(regplate)
+                if ratio_a(box) > 4 and widht > 29:
                     plates.append(approx)
                     cropped = crop_contour(image, to_box(approx, 0.1))
                     # thresh_crop = process_img(cropped, 110)
                     # cv2.imshow("cropped", cropped)
                     # print(to_text(cropped))
+    print(len(plates))
+    print(type(thresh), type(output))
+    cv2.drawContours(thresh, plates, -1, (0, 255, 0), 2)
 
-    cv2.drawContours(output, plates, -1, (0, 255, 0), 2)
-
-    return output
-    
+    return thresh
