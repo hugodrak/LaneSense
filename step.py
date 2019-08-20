@@ -120,7 +120,7 @@ def toggle_images(key):
 
 main_plot = Plot()
 main_plot.update(source.get_frame(time_clip))
-main_plot.auto_fit(1366)
+main_plot.auto_fit(1920)
 
 while show:
     key = cv2.waitKey(50)
